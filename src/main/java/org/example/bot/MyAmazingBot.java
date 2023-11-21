@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.security.SecureRandom;
 import java.util.LinkedList;
 
 public class MyAmazingBot extends TelegramLongPollingBot {
@@ -30,7 +31,11 @@ public class MyAmazingBot extends TelegramLongPollingBot {
             list = new LinkedList<>();
             message.setChatId(chat_id);
             User user = update.getMessage().getFrom();
-            list.add(new Entity(user.getFirstName().toString(), user.getUserName().toString()));
+            String username =  user.getUserName();
+            if (username==null){
+                username = user.getId().toString();
+            }
+            list.add(new Entity(user.getFirstName().toString(),username.toString()));
 
            boolean is_user_already_exists = backEndIMPL.insertUser(list);
            if (!is_user_already_exists){
@@ -61,4 +66,5 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
 
     }
+
 }
