@@ -17,9 +17,9 @@ public class BackEndIMPL implements UserManagingService {
 
 
     @Override
-    public void insertUser(List<Entity> entities) {
+    public Boolean insertUser(List<Entity> entities) {
         DAO dao = new DaoImpl();
-        dao.insertUser(entities);
+        return dao.insertUser(entities);
     }
 
     @Override

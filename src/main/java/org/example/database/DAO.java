@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DAO {
 
-    void insertUser(List<Entity> entities);
+    Boolean insertUser(List<Entity> entities);
 
     List<Entity> AllUsers();
 

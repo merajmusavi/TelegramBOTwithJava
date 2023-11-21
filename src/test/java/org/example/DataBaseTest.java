@@ -30,6 +30,23 @@ public class DataBaseTest {
             throw new RuntimeException(e);
         }
     }
+    @Test
+    void do_not_insert_if_user_is_already_exists(){
+        try {
+            Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT IGNORE INTO data(name, username) VALUES(?, ?)");
+            preparedStatement.setString(1,"ali");
+            preparedStatement.setString(2,"al3ii");
+            int i = preparedStatement.executeUpdate();
+            if (i==0){
+                Assertions.fail("username is already exists");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @Test
     void db_should_be_connected() {

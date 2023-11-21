@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserManagingService {
 
 
-    void insertUser(List<Entity> entities);
+    Boolean insertUser(List<Entity> entities);
 
     List<Entity> AllUsers();
 

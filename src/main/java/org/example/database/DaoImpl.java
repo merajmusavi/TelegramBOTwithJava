@@ -28,20 +28,24 @@ public class DaoImpl implements DAO {
     }
 
     @Override
-    public void insertUser(List<Entity> entities) {
+    public Boolean insertUser(List<Entity> entities) {
         try {
             Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
-            PreparedStatement insertUserToDataBase = connection.prepareStatement("INSERT INTO data(name, username) VALUES(?, ?)");
+            PreparedStatement insertUserToDataBase = connection.prepareStatement("INSERT IGNORE INTO data(name, username) VALUES(?, ?)");
 
             insertUserToDataBase.setString(1, entities.get(0).getName());
             insertUserToDataBase.setString(2, entities.get(0).getUsername());
 
-            insertUserToDataBase.executeUpdate();
+            int i = insertUserToDataBase.executeUpdate();
+            if (i==0){
+                return false;
+            }
 
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return true;
     }
 
     @Override
