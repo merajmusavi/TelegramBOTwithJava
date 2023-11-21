@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -50,6 +51,20 @@ public class DaoImpl implements DAO {
 
     @Override
     public List<Entity> AllUsers() {
-        return null;
+        LinkedList<Entity> entities = new LinkedList<Entity>();
+        try {
+            Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM data");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                String name = resultSet.getString("name");
+                String username = resultSet.getString("username");
+                entities.add(new Entity(name,username));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return entities;
+
     }
 }

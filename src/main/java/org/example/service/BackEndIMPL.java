@@ -1,4 +1,4 @@
-package org.example.impl;
+package org.example.service;
 
 import org.example.Model.Entity;
 import org.example.database.DAO;
@@ -24,6 +24,7 @@ public class BackEndIMPL implements UserManagingService {
 
     @Override
     public List<Entity> AllUsers() {
-        return null;
+        DAO dao = new DaoImpl();
+        return dao.AllUsers();
     }
 }
