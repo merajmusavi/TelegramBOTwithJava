@@ -30,6 +30,27 @@ public class DataBaseTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    void update_status_of_user(){
+        try {
+            Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE data SET status = ? WHERE username = ? ");
+            preparedStatement.setInt(1, 0);
+            preparedStatement.setString(2, "Merajmu");
+
+            int i = preparedStatement.executeUpdate();
+
+            if (i > 0) {
+
+            }else {
+                Assertions.fail("ffff");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Test
     void do_not_insert_if_user_is_already_exists(){
         try {

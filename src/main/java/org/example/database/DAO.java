@@ -10,4 +10,5 @@ public interface DAO {
 
     List<Entity> AllUsers();
 
+    Boolean changestatus(String username, int status);
 }

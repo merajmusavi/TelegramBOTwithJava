@@ -62,6 +62,9 @@ public class MyAmazingBot extends TelegramLongPollingBot {
                     stringBuilder.append(entity.getName() + "\n");
                 }
                 message.setText(stringBuilder.toString());
+                if (text.equals("/countuser")){
+
+                }
             } else {
                 boolean is_user_already_exists = backEndIMPL.insertUser(list);
                 if (!is_user_already_exists) {

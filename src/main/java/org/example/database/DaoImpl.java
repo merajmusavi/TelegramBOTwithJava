@@ -38,7 +38,7 @@ public class DaoImpl implements DAO {
             insertUserToDataBase.setString(2, entities.get(0).getUsername());
 
             int i = insertUserToDataBase.executeUpdate();
-            if (i==0){
+            if (i == 0) {
                 return false;
             }
 
@@ -56,15 +56,36 @@ public class DaoImpl implements DAO {
             Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM data");
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 String username = resultSet.getString("username");
-                entities.add(new Entity(name,username));
+                entities.add(new Entity(name, username));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return entities;
 
+    }
+
+
+    @Override
+    public Boolean changestatus(String username, int status) {
+        try {
+            Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE SET status = ? WHERE username = ? ");
+            preparedStatement.setInt(1, status);
+            preparedStatement.setString(2, username);
+
+            int i = preparedStatement.executeUpdate();
+
+            if (i > 0) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 }
