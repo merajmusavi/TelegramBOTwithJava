@@ -22,6 +22,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
     LinkedList<Entity> list;
     private String TOKEN;
     private long ID;
+    int status;
 
 
     @Override
@@ -57,25 +58,23 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
             if (text.equals("/panel") && userId == ID) {
                 // it will be used in managing status
-                List<Entity> entities = backEndIMPL.AllUsers();
 
                 backEndIMPL.changestatus(user.getUserName(), 1);
-                int status = backEndIMPL.selectSpecificUserStatus(user.getUserName());
-                while (status==1){
-                    if (text.equals("/status")){
-                        // status of bot mechanism will be here
-                        message.setText("status of bot");
-                        break;
-                    } else if (text.equals("/remove")) {
-                        // remove a specific user will be here
-                        message.setText("remove user");
-                        break;
-                    } else if (text.equals("/ex")) {
-                        backEndIMPL.changestatus(user.getUserName(),0);
-                        message.setText("khoroj");
-                    }
+                 status = backEndIMPL.selectSpecificUserStatus(user.getUserName());
+                 message.setText("welcome to the managing panel");
+
+
+            } else if (status==1 && text.equals("/users")) {
+                List<Entity> entities = backEndIMPL.AllUsers();
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (Entity entity : entities) {
+                    stringBuilder.append(entity.getName()+"\n");
                 }
 
+                message.setText(stringBuilder.toString());
+                backEndIMPL.changestatus(username,0);
             } else {
                 boolean is_user_already_exists = backEndIMPL.insertUser(list);
                 if (!is_user_already_exists) {
