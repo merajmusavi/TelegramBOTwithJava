@@ -56,21 +56,31 @@ public class MyAmazingBot extends TelegramLongPollingBot {
             list.add(new Entity(user.getFirstName().toString(), username.toString()));
 
             if (text.equals("/panel") && userId == ID) {
+                // it will be used in managing status
                 List<Entity> entities = backEndIMPL.AllUsers();
-                StringBuilder stringBuilder = new StringBuilder();
-                for (Entity entity : entities) {
-                    stringBuilder.append(entity.getName() + "\n");
-                }
-                message.setText(stringBuilder.toString());
-                if (text.equals("/countuser")){
 
+                backEndIMPL.changestatus(user.getUserName(), 1);
+                int status = backEndIMPL.selectSpecificUserStatus(user.getUserName());
+                while (status==1){
+                    if (text.equals("/status")){
+                        // status of bot mechanism will be here
+                        message.setText("status of bot");
+                        break;
+                    } else if (text.equals("/remove")) {
+                        // remove a specific user will be here
+                        message.setText("remove user");
+                        break;
+                    } else if (text.equals("/ex")) {
+                        backEndIMPL.changestatus(user.getUserName(),0);
+                        message.setText("khoroj");
+                    }
                 }
+
             } else {
                 boolean is_user_already_exists = backEndIMPL.insertUser(list);
                 if (!is_user_already_exists) {
                     // it means user already started a bot once
                     message.setText(text);
-                    //     message.setText(String.valueOf(userId));
 
                 } else {
                     // it means its the first time that user starts our bot
@@ -94,6 +104,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return "6724598515:AAGGHCD-hMy0mWCL0d7GSZhMAD39ASxkUCY";
+
 
 
     }

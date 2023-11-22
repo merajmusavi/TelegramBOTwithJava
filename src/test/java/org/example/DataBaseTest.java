@@ -32,7 +32,34 @@ public class DataBaseTest {
     }
 
     @Test
-    void update_status_of_user(){
+    void selectUser(){
+
+        int status = 0;
+        try {
+            Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM data WHERE username = ?");
+
+            preparedStatement.setString(1,"Merajmu");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                status = resultSet.getInt("status");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if (status==0 || status==1){
+            System.out.println("ok!");
+        }else {
+            Assertions.fail("as fuck");
+        }
+
+    }
+
+
+    @Test
+    void update_status_of_user() {
         try {
             Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE data SET status = ? WHERE username = ? ");
@@ -42,8 +69,8 @@ public class DataBaseTest {
             int i = preparedStatement.executeUpdate();
 
             if (i > 0) {
-
-            }else {
+                System.out.println("successfully passed");
+            } else {
                 Assertions.fail("ffff");
             }
 
@@ -51,15 +78,16 @@ public class DataBaseTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
-    void do_not_insert_if_user_is_already_exists(){
+    void do_not_insert_if_user_is_already_exists() {
         try {
             Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT IGNORE INTO data(name, username) VALUES(?, ?)");
-            preparedStatement.setString(1,"ali");
-            preparedStatement.setString(2,"al3ii");
+            preparedStatement.setString(1, "ali");
+            preparedStatement.setString(2, "al3ii");
             int i = preparedStatement.executeUpdate();
-            if (i==0){
+            if (i == 0) {
                 Assertions.fail("username is already exists");
             }
 
@@ -87,7 +115,7 @@ public class DataBaseTest {
     }
 
     @Test
-    void crud_test(){
+    void crud_test() {
 
         try {
             Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
@@ -97,8 +125,8 @@ public class DataBaseTest {
             PreparedStatement select = connection.prepareStatement("SELECT * FROM data");
 
 
-            insert.setString(1,"meraj");
-            insert.setString(2,"merajmu");
+            insert.setString(1, "meraj");
+            insert.setString(2, "merajmu");
 
             insert.executeUpdate();
 
@@ -106,7 +134,7 @@ public class DataBaseTest {
             ResultSet resultSet = select.executeQuery();
             System.out.println(resultSet);
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 String name = resultSet.getString("name");
 
                 System.out.println(name);
@@ -114,7 +142,6 @@ public class DataBaseTest {
 
 
             }
-
 
 
         } catch (SQLException e) {

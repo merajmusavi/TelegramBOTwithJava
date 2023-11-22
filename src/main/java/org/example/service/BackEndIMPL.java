@@ -27,4 +27,16 @@ public class BackEndIMPL implements UserManagingService {
         DAO dao = new DaoImpl();
         return dao.AllUsers();
     }
+
+    @Override
+    public Boolean changestatus(String username, int status) {
+        DAO dao = new DaoImpl();
+        return dao.changestatus(username,status);
+    }
+
+    @Override
+    public int selectSpecificUserStatus(String username) {
+        DAO dao = new DaoImpl();
+        return dao.selectSpecificUserStatus(username);
+    }
 }

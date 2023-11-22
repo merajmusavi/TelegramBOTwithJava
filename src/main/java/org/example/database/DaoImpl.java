@@ -73,7 +73,7 @@ public class DaoImpl implements DAO {
     public Boolean changestatus(String username, int status) {
         try {
             Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE SET status = ? WHERE username = ? ");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE data SET status = ? WHERE username = ? ");
             preparedStatement.setInt(1, status);
             preparedStatement.setString(2, username);
 
@@ -87,5 +87,25 @@ public class DaoImpl implements DAO {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    @Override
+    public int selectSpecificUserStatus(String username) {
+        int status = 0;
+        try {
+            Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM data WHERE username = ?");
+
+            preparedStatement.setString(1,username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                 status = resultSet.getInt("status");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return status;
     }
 }

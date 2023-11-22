@@ -10,5 +10,8 @@ public interface UserManagingService {
     Boolean insertUser(List<Entity> entities);
 
     List<Entity> AllUsers();
+    Boolean changestatus(String username, int status);
+    int selectSpecificUserStatus(String username);
+
 
 }
