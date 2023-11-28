@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class MyAmazingBot extends TelegramLongPollingBot {
 
@@ -81,12 +82,24 @@ public class MyAmazingBot extends TelegramLongPollingBot {
                 message.setText(stringBuilder.toString());
                 backEndIMPL.changestatus(username, 0);
                 status = backEndIMPL.selectSpecificUserStatus(user.getUserName());
-            } else if (text.equals("خروج") && status == 2) {
-                backEndIMPL.changestatus(username, 0);
-            } else if (status == 2) {
-                if (text.equals("berim")) {
-                    message.setText("salam, in text vared email side mishe");
+            } else if (status==3){
+                if (patternMatches(text)){
+                    backEndIMPL.updateEmail(username,text);
                     backEndIMPL.changestatus(username, 0);
+                    message.setText("ایمیلت ثبت شد :)");
+                }else {
+                    message.setText("ایمیلت فرمت درستی نداره، لطفا درست واردش کن :)");
+                }
+
+            }
+
+            else if (text.equals("خروج") && status == 2) {
+                backEndIMPL.changestatus(username, 0);
+                message.setText("از مرحله ثبت نام خارج شدیم! حالا چیکار کنیم؟!");
+            } else if (status == 2) {
+                if (text.equals("email")) {
+                    message.setText("سلام. ایمیلت رو وارد کن :)");
+                    backEndIMPL.changestatus(username, 3);
 
                 } else {
                     message.setText("شما در مرحله ثبت نام هستید، جهت خروج از این مرحله، کلمه خروج را ارسال کنید");
@@ -128,6 +141,12 @@ public class MyAmazingBot extends TelegramLongPollingBot {
         return "6724598515:AAGGHCD-hMy0mWCL0d7GSZhMAD39ASxkUCY";
 
 
+    }
+    public static boolean patternMatches(String emailAddress) {
+       String regexPattern = "^(.+)@(\\S+)$";
+        return Pattern.compile(regexPattern)
+                .matcher(emailAddress)
+                .matches();
     }
 
 }

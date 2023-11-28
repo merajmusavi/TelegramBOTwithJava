@@ -39,4 +39,10 @@ public class BackEndIMPL implements UserManagingService {
         DAO dao = new DaoImpl();
         return dao.selectSpecificUserStatus(username);
     }
+
+    @Override
+    public Boolean updateEmail(String username, String email) {
+        DAO dao = new DaoImpl();
+        return dao.updateEmail(username,email);
+    }
 }

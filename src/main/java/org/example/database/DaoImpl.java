@@ -108,4 +108,24 @@ public class DaoImpl implements DAO {
         }
         return status;
     }
+
+    @Override
+    public Boolean updateEmail(String username, String email) {
+        try {
+            Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE data SET email = ? WHERE username = ? ");
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, username);
+
+            int i = preparedStatement.executeUpdate();
+
+            if (i > 0) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
 }

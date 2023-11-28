@@ -12,6 +12,7 @@ public interface UserManagingService {
     List<Entity> AllUsers();
     Boolean changestatus(String username, int status);
     int selectSpecificUserStatus(String username);
+    Boolean updateEmail(String username,String email);
 
 
 }
