@@ -24,9 +24,15 @@ public class MyAmazingBot extends TelegramLongPollingBot {
     private long ID;
     int status;
 
-
     @Override
     public void onUpdateReceived(Update update) {
+        backEndIMPL = new BackEndIMPL(new DaoImpl());
+
+        User userup = update.getMessage().getFrom();
+
+        status = backEndIMPL.selectSpecificUserStatus(userup.getUserName());
+
+
         try (InputStream inputStream = new FileInputStream("config.properties")) {
             Properties properties = new Properties();
             properties.load(inputStream);
@@ -45,7 +51,6 @@ public class MyAmazingBot extends TelegramLongPollingBot {
             long userId = Long.parseLong(user.getId().toString());
 
 
-            backEndIMPL = new BackEndIMPL(new DaoImpl());
             list = new LinkedList<>();
             message.setChatId(chat_id);
             String username = user.getUserName();
@@ -60,27 +65,44 @@ public class MyAmazingBot extends TelegramLongPollingBot {
                 // it will be used in managing status
 
                 backEndIMPL.changestatus(user.getUserName(), 1);
-                 status = backEndIMPL.selectSpecificUserStatus(user.getUserName());
-                 message.setText("welcome to the managing panel");
+                status = backEndIMPL.selectSpecificUserStatus(user.getUserName());
+                message.setText("welcome to the managing panel");
 
 
-            } else if (status==1 && text.equals("/users")) {
+            } else if (status == 1 && text.equals("/users")) {
                 List<Entity> entities = backEndIMPL.AllUsers();
 
                 StringBuilder stringBuilder = new StringBuilder();
 
                 for (Entity entity : entities) {
-                    stringBuilder.append(entity.getName()+"\n");
+                    stringBuilder.append(entity.getName() + "\n");
                 }
 
                 message.setText(stringBuilder.toString());
-                backEndIMPL.changestatus(username,0);
+                backEndIMPL.changestatus(username, 0);
                 status = backEndIMPL.selectSpecificUserStatus(user.getUserName());
+            } else if (text.equals("خروج") && status == 2) {
+                backEndIMPL.changestatus(username, 0);
+            } else if (status == 2) {
+                if (text.equals("berim")) {
+                    message.setText("salam, in text vared email side mishe");
+                    backEndIMPL.changestatus(username, 0);
+
+                } else {
+                    message.setText("شما در مرحله ثبت نام هستید، جهت خروج از این مرحله، کلمه خروج را ارسال کنید");
+                }
             } else {
                 boolean is_user_already_exists = backEndIMPL.insertUser(list);
+
                 if (!is_user_already_exists) {
                     // it means user already started a bot once
-                    message.setText(text);
+                    if (text.equals("/signup")) {
+                        message.setText("signup started, enter your email");
+                        backEndIMPL.changestatus(username, 2);
+                    } else {
+                        message.setText("dsfsffse");
+                    }
+
 
                 } else {
                     // it means its the first time that user starts our bot
@@ -104,7 +126,6 @@ public class MyAmazingBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return "6724598515:AAGGHCD-hMy0mWCL0d7GSZhMAD39ASxkUCY";
-
 
 
     }
